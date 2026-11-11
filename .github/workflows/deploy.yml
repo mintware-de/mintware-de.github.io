@@ -28,9 +28,17 @@ jobs:
         working-directory: src/catalyst_builder
       - run: npm run build
         working-directory: src/catalyst_builder
+      # The repo is a user-site (*.github.io), so Pages serves from the domain
+      # root. Astro builds with base=/catalyst_builder (flat dist/, prefixed
+      # links), so stage the artifact with the site nested at that path.
+      - name: Stage Pages artifact
+        run: |
+          mkdir -p pages/catalyst_builder
+          cp -R src/catalyst_builder/dist/. pages/catalyst_builder/
+          cp src/catalyst_builder/public/robots.txt pages/robots.txt
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: src/catalyst_builder/dist
+          path: pages
 
   deploy:
     needs: build

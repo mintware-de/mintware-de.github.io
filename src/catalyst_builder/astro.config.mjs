@@ -3,11 +3,13 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { catalystDark } from './src/styles/shiki-theme';
 
-// GitHub Pages PROJECT site: `site` is the user root, `base` is the repo name.
-// When the repo is created (or renamed), change `site`/`base` here + the Sitemap
-// line in public/robots.txt — nothing else references the prefix.
-const site = 'https://julian.github.io';
-const base = '/catalyst_builder_website';
+// GitHub Pages USER site (mintware-de/mintware-de.github.io): served from the
+// domain root, so the site lives under `base` — the deploy workflow nests the
+// build output at that path in the Pages artifact. When the path changes,
+// update `base` here + the Sitemap line in public/robots.txt + the staging
+// path in .github/workflows/deploy.yml — nothing else references the prefix.
+const site = 'https://mintware-de.github.io';
+const base = '/catalyst_builder';
 
 // The [lang] routes are hand-rolled (getStaticPaths); the sitemap plugin
 // correlates locale pages itself once told which URL segment is the locale
@@ -21,8 +23,8 @@ export default defineConfig({
   site,
   base,
   output: 'static',
-  // Default outDir (dist/ inside the project) — the Pages workflow uploads
-  // src/catalyst_builder/dist as the artifact.
+  // Default outDir (dist/ inside the project) — the Pages workflow stages it
+  // at <artifact>/catalyst_builder/ so it serves under `base`.
   trailingSlash: 'ignore',
   integrations: [sitemap({ i18n: sitemapI18n })],
   i18n: {

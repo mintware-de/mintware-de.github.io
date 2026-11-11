@@ -13,7 +13,8 @@ const { locale } = Astro.props;
 const { t } = useTranslations(locale);
 
 // Canonical/hreflang URLs are built manually from BASE_URL — getRelativeLocaleUrl
-// is unreliable with a non-root `base`. site = user root, base = repo name.
+// is unreliable with a non-root `base`. site = Pages domain root,
+// base = the path prefix the site is served under (see astro.config.mjs).
 const siteRoot = import.meta.env.SITE.replace(/\/$/, '');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const localePath = (l: Locale) => `${siteRoot}${base}/${l === defaultLocale ? '' : `${l}/`}`;
@@ -47,7 +48,7 @@ const jsonLd = JSON.stringify({
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{t('meta.title')}</title>
     <meta name="description" content={t('meta.description')} />
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="canonical" href={canonical} />
     {locales.map((l) => <link rel="alternate" hreflang={l} href={localePath(l)} />)}
     <link rel="alternate" hreflang="x-default" href={localePath(defaultLocale)} />
