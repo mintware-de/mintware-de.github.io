@@ -7,7 +7,7 @@ import { catalystDark } from './src/styles/shiki-theme';
 // domain root, so the site lives under `base` — the deploy workflow nests the
 // build output at that path in the Pages artifact. When the path changes,
 // update `base` here + the Sitemap line in public/robots.txt + the staging
-// path in .github/workflows/deploy.yml — nothing else references the prefix.
+// path in .github/workflows/catalyst_builder.yml — nothing else references the prefix.
 const site = 'https://mintware-de.github.io';
 const base = '/catalyst_builder';
 

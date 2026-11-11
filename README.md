@@ -1,41 +1,48 @@
-# catalyst_builder landing page
+# projects — landing pages
 
-Static marketing site for the Dart package [catalyst_builder](https://pub.dev/packages/catalyst_builder), built with [Astro](https://astro.build) and deployed to GitHub Pages.
+This repo hosts the marketing / landing pages for my projects. Each project is a **self-contained [Astro](https://astro.build) site** in its own directory under `src/`, with its own toolchain and its own deploy workflow, published as a subpath of `https://mintware-de.github.io`.
 
-Five locales — `en` (default, at `/`), `de`, `fr`, `it`, `es` (at `/de/`, `/fr/`, …). English is the fallback for both missing pages (`i18n.fallback` in the Astro config) and missing dictionary keys (the `deepMerge` in `src/i18n/index.ts`).
+## Layout
 
-The Astro project lives in **`src/catalyst_builder/`**; the build output goes to **`docs/catalyst_builder/`** (set via `outDir`, git-ignored). The Pages workflow uploads that directory as the artifact, so published URLs don't depend on the output location.
+```
+├── .github/workflows/<project>.yml   # one Pages workflow per project
+└── src/
+    └── <project>/                    # a standalone Astro site
+        ├── README.md                 # project-specific docs (commands, structure, config)
+        ├── astro.config.mjs
+        └── ...
+```
 
-## Commands
+| Project | Source | Live at |
+| --- | --- | --- |
+| [catalyst_builder](src/catalyst_builder/) | `src/catalyst_builder/` | [mintware-de.github.io/catalyst_builder/](https://mintware-de.github.io/catalyst_builder/) |
 
-Run from the repo root (or `cd src/catalyst_builder` and drop the `--prefix`):
+Each project directory is fully self-contained — `package.json`, lockfile, config, sources. Everything about a specific site (commands, file layout, i18n, deployment details) lives in its own README.
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev --prefix src/catalyst_builder` | Dev server with hot reload |
-| `npm run build --prefix src/catalyst_builder` | Static build to `docs/catalyst_builder/` |
-| `npm run preview --prefix src/catalyst_builder` | Serve the built site |
-| `npm run check --prefix src/catalyst_builder` | Type check + i18n key-parity check |
+## Conventions
 
-## Where things live
+Every site follows the same shape so they stay interchangeable:
 
-- `src/catalyst_builder/src/pages/index.astro` — English page; `[lang]/index.astro` — generates the four prefixed locales via `getStaticPaths`. Both render the shared `Landing.astro`.
-- `src/catalyst_builder/src/i18n/{en,de,fr,it,es}.json` — all translatable copy. **`en.json` is the schema**: add a key there first, then to the others (`npm run check` fails if they drift). Sentences may contain `` `inline code` `` backticks, rendered by `RichText.astro`.
-- `src/catalyst_builder/src/data/content.ts` — deliberately **not** translated: version, package names, URLs, facts values, and all code snippets.
-- `src/catalyst_builder/src/styles/global.css` — design tokens (`--accent`, `--bg`, …) as CSS variables; the only file with raw hex colors. Code highlighting palette lives in `src/styles/shiki-theme.ts`.
-- `src/catalyst_builder/src/components/` — one component per page section plus `Snippet.astro` (Dart → Shiki, shell → plain text with accent `$`) and the SVG icons.
+- **Static output** — `output: 'static'`, built to `dist/` inside the project (git-ignored).
+- **Subpath hosting** — the repo is a user site (`*.github.io`), so each project sets `base: /<project>` in `astro.config.mjs` and its workflow stages the artifact nested at that path. The URL prefix appears in exactly three places per project: `astro.config.mjs` (`site`/`base`), `public/robots.txt` (`Sitemap:` line), and the workflow's staging path.
+- **One workflow per project** — `.github/workflows/<project>.yml` builds from `src/<project>/` and uploads the Pages artifact; repo **Pages → Source** is **GitHub Actions**.
+- **Multi-locale sites** roll their own `[lang]` routing via `getStaticPaths` with English as fallback (both page-level `i18n.fallback` and key-level merge), and keep an i18n parity check wired into `npm run check`.
 
-## Deploying to GitHub Pages
+## Adding a new project
 
-`.github/workflows/deploy.yml` builds from `src/catalyst_builder/` and publishes `docs/catalyst_builder/` via `actions/deploy-pages`. Set the repo's **Pages → Source** to **GitHub Actions** once.
+1. Create `src/<project>/` as a fresh Astro site (copying an existing project is the fastest start) and set `base: /<project>`.
+2. Add `public/robots.txt` with the matching `Sitemap:` line.
+3. Add `.github/workflows/<project>.yml` — copy an existing one and swap the project name in the paths.
+4. Write a `README.md` inside the project (that's the canonical doc for it) and add a row to the table above.
 
-Before the first push, set your actual GitHub username and repo name in **both**:
+## Working on a project
 
-1. `src/catalyst_builder/astro.config.mjs` — `site` (user root, e.g. `https://<user>.github.io`) and `base` (e.g. `/<repo>`).
-2. `src/catalyst_builder/public/robots.txt` — the `Sitemap:` line.
+All commands run inside the project directory:
 
-Everything else (asset URLs, sitemap, canonical/hreflang) derives from those two values.
-
-## Reference
-
-`reference/generated.original.html` is the original design-canvas export; `reference/page.static.html` is the resolved markup it was ported from (via `scripts/extract-static.mjs`). They are kept for diffing future changes, never shipped.
+```sh
+cd src/<project>
+npm install
+npm run dev      # dev server with hot reload
+npm run check    # type check (+ any project-specific checks)
+npm run build    # static build to dist/
+```
