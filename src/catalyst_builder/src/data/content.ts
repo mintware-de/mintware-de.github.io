@@ -23,10 +23,12 @@ export const packages = [
   { name: contractsName, url: urls.pubContracts, accent: false },
 ];
 
-// Facts strip: the values stay fixed, the labels are translated (i18n facts[*].label).
+// Facts strip fallback: the live values are fetched from the pub.dev API at build
+// time (see data/pub.ts); these are used only when that fetch fails. Labels are
+// translated in i18n facts[*].label.
 export const facts: { value: string; suffix?: string }[] = [
   { value: version },
-  { value: '150', suffix: '/150' },
+  { value: '150', suffix: '/160' },
   { value: '6' },
   { value: 'MIT' },
   { value: '✓' },

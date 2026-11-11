@@ -4,13 +4,15 @@ import '@fontsource-variable/space-grotesk';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { useTranslations, locales, defaultLocale, localePath, type Locale } from '../i18n';
-import { version, urls } from '../data/content';
+import { urls } from '../data/content';
+import { getPackageInfo } from '../data/pub';
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
 const { t } = useTranslations(locale);
+const { version, license } = await getPackageInfo();
 
 // Canonical/hreflang URLs are built manually from BASE_URL — getRelativeLocaleUrl
 // is unreliable with a non-root `base`. site = Pages domain root,
@@ -39,7 +41,7 @@ const jsonLd = JSON.stringify({
   programmingLanguage: 'Dart',
   softwareVersion: version,
   codeRepository: urls.github,
-  license: 'https://spdx.org/licenses/MIT',
+  license: `https://spdx.org/licenses/${license}`,
   sameAs: [urls.pubBuilder, urls.pubContracts],
 });
 ---

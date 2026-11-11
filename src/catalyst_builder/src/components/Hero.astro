@@ -1,13 +1,15 @@
 ---
 import type { Locale } from '../i18n';
 import { useTranslations } from '../i18n';
-import { urls, version, snippets } from '../data/content';
+import { urls, snippets } from '../data/content';
+import { getPackageInfo } from '../data/pub';
 import RichText from './RichText.astro';
 import Snippet from './Snippet.astro';
 import ArrowRight from './icons/ArrowRight.astro';
 
 const { locale } = Astro.props as { locale: Locale };
 const { t } = useTranslations(locale);
+const { version } = await getPackageInfo();
 ---
 <section id="top" class="hero">
   <div class="hero-dots" aria-hidden="true"></div>
