@@ -1,0 +1,17 @@
+---
+// Renders a translated sentence, turning `backtick` spans into <code>.
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: className } = Astro.props;
+const escape = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const html = text
+  .split('`')
+  .map((seg, i) =>
+    i % 2 === 1 ? `<code class="inline-code">${escape(seg)}</code>` : escape(seg),
+  )
+  .join('');
+---
+{className ? <span class={className} set:html={html} /> : <span set:html={html} />}

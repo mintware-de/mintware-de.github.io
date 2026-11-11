@@ -1,0 +1,28 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import { urls, packageName } from '../data/content';
+import Logo from './icons/Logo.astro';
+import GithubIcon from './icons/GithubIcon.astro';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t } = useTranslations(locale);
+---
+<header class="site-header">
+  <nav aria-label={t('aria.main')} class="nav">
+    <a href="#top" class="brand">
+      <Logo width={44} height={30} />
+      <span class="brand-name">{packageName}</span>
+    </a>
+    <div class="nav-links">
+      <a href="#how" class="nav-link">{t('nav.how')}</a>
+      <a href="#features" class="nav-link">{t('nav.features')}</a>
+      <a href="#quickstart" class="nav-link">{t('nav.quickstart')}</a>
+      <a href={urls.wiki} class="nav-link">{t('nav.docs')}</a>
+      <a href={urls.github} class="btn-gh">
+        <GithubIcon />
+        {t('nav.github')}
+      </a>
+    </div>
+  </nav>
+</header>

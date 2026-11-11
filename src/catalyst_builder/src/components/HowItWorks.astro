@@ -1,0 +1,44 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import { snippets } from '../data/content';
+import RichText from './RichText.astro';
+import Snippet from './Snippet.astro';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t, dict } = useTranslations(locale);
+
+const stepSnippets = [
+  { lang: 'dart' as const, code: snippets.stepDart },
+  { lang: 'shell' as const, code: snippets.stepShell, prompt: true },
+  { lang: 'dart' as const, code: snippets.stepBootDart },
+];
+---
+<section id="how" class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">{t('how.eyebrow')}</span>
+      <h2 class="section-h2">{t('how.title')}</h2>
+    </div>
+    <div class="card-row">
+      {
+        dict.how.steps.map((step, i) => {
+          const snip = stepSnippets[i];
+          return (
+            <div class="step-card">
+              <div class="step-top">
+                <span class="step-num">{i + 1}</span>
+                <span class="step-tag">{step.tag}</span>
+              </div>
+              <h3 class="card-h3">{step.title}</h3>
+              <p class="card-body">
+                <RichText text={step.body} />
+              </p>
+              <Snippet code={snip.code} lang={snip.lang} prompt={'prompt' in snip} variant="v-step" />
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import { facts } from '../data/content';
+
+const { locale } = Astro.props as { locale: Locale };
+const { dict } = useTranslations(locale);
+---
+<section aria-label={dict.aria.facts} class="facts">
+  <div class="facts-inner">
+    {facts.map((f, i) => (
+      <div class="fact">
+        <span class="fact-value">
+          {f.value}{f.suffix && <span class="fact-suffix">{f.suffix}</span>}
+        </span>
+        <span class="fact-label">{dict.facts[i]?.label}</span>
+      </div>
+    ))}
+  </div>
+</section>

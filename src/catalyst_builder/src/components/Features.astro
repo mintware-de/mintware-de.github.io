@@ -1,0 +1,35 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import RichText from './RichText.astro';
+import FeatureIcons from './icons/FeatureIcons.astro';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t, dict } = useTranslations(locale);
+
+const iconNames = ['bolt', 'tag', 'brackets', 'layers', 'monitor', 'circle-check'] as const;
+---
+<section id="features" class="section section-alt">
+  <div class="section-inner">
+    <div class="features-head">
+      <div class="section-head">
+        <span class="eyebrow">{t('features.eyebrow')}</span>
+        <h2 class="section-h2">{t('features.title')}</h2>
+      </div>
+      <p class="features-aside">{t('features.aside')}</p>
+    </div>
+    <div class="feature-grid">
+      {
+        dict.features.items.map((item, i) => (
+          <div class="feature-card">
+            <FeatureIcons name={iconNames[i]} />
+            <h3 class="feature-h3">{item.title}</h3>
+            <p class="feature-p">
+              <RichText text={item.body} />
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

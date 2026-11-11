@@ -1,0 +1,26 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import { urls } from '../data/content';
+import Logo from './icons/Logo.astro';
+import StarIcon from './icons/StarIcon.astro';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t } = useTranslations(locale);
+---
+<section class="section">
+  <div class="cta-inner">
+    <Logo width={118} height={80} label={t('cta.logoAria')} />
+    <h2 class="cta-h2">
+      {t('cta.title')}<br />{t('cta.titleAccent')}
+    </h2>
+    <p class="cta-lede">{t('cta.lede')}</p>
+    <div class="cta-row" style="justify-content: center; margin-top: 8px">
+      <a href={urls.github} class="btn-primary">
+        <StarIcon />
+        {t('cta.star')}
+      </a>
+      <a href={urls.wiki} class="btn-ghost">{t('cta.docs')}</a>
+    </div>
+  </div>
+</section>

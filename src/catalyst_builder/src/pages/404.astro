@@ -1,0 +1,18 @@
+---
+import Layout from '../components/Layout.astro';
+import Logo from '../components/icons/Logo.astro';
+---
+<Layout locale="en">
+  <main>
+    <div class="cta-inner" style="min-height: 70vh; justify-content: center">
+      <Logo width={96} height={66} label="Catalyst Builder" />
+      <h1 class="cta-h2" style="font-size: clamp(34px, 5vw, 54px)">Page not found.</h1>
+      <p class="cta-lede">
+        The page you were looking for doesn't exist.
+      </p>
+      <div class="cta-row" style="justify-content: center">
+        <a href="./" class="btn-primary">Back to the landing page</a>
+      </div>
+    </div>
+  </main>
+</Layout>

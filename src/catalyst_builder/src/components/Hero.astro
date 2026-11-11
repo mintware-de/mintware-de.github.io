@@ -1,0 +1,53 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import { urls, version, snippets } from '../data/content';
+import RichText from './RichText.astro';
+import Snippet from './Snippet.astro';
+import ArrowRight from './icons/ArrowRight.astro';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t } = useTranslations(locale);
+---
+<section id="top" class="hero">
+  <div class="hero-dots" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="badge">
+        <span class="badge-version">v{version}</span>
+        {t('hero.badge')}
+      </div>
+      <h1 class="hero-h1">
+        {t('hero.h1a')}<br /><span class="accent">{t('hero.h1b')}</span>
+      </h1>
+      <p class="hero-lede">
+        <RichText text={t('hero.lede')} />
+      </p>
+      <div class="cta-row">
+        <a href="#quickstart" class="btn-primary">
+          {t('hero.ctaPrimary')}
+          <ArrowRight />
+        </a>
+        <a href={urls.pubBuilder} class="btn-ghost">{t('hero.ctaSecondary')}</a>
+      </div>
+      <div class="cmd-pill">
+        <span class="prompt">$</span>
+        <code>{snippets.addCommand}</code>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="code-card">
+        <div class="code-chrome">
+          <div class="dots" aria-hidden="true">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <span class="code-title">lib/main.dart</span>
+        </div>
+        <Snippet code={snippets.heroDart} lang="dart" variant="v-hero" />
+      </div>
+    </div>
+  </div>
+</section>

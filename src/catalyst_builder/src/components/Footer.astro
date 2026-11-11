@@ -1,0 +1,22 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import { urls, brand, brandUrl } from '../data/content';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t } = useTranslations(locale);
+const [before, after] = t('footer.copyright').split('{brand}');
+---
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copyright">
+      {before}<a href={brandUrl}>{brand}</a>{after}
+    </span>
+    <div class="footer-links">
+      <a href={urls.github} class="footer-link">{t('footer.github')}</a>
+      <a href={urls.pubBuilder} class="footer-link">{t('footer.pubdev')}</a>
+      <a href={urls.pubChangelog} class="footer-link">{t('footer.changelog')}</a>
+      <a href={urls.issues} class="footer-link">{t('footer.issues')}</a>
+    </div>
+  </div>
+</footer>

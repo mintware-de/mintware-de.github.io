@@ -1,0 +1,24 @@
+---
+// The 6 feature-card icons. Stroke color comes from CSS (.feature-card svg).
+interface Props {
+  name: 'bolt' | 'tag' | 'brackets' | 'layers' | 'monitor' | 'circle-check';
+}
+const { name } = Astro.props;
+
+const shapes: Record<Props['name'], string[]> = {
+  bolt: ['M13 2 4 14h7l-1 8 9-12h-7l1-8Z'],
+  tag: ['M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z'],
+  brackets: ['M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3', 'M9 12h6'],
+  layers: ['M12 2 2 7l10 5 10-5-10-5Z', 'm2 17 10 5 10-5M2 12l10 5 10-5'],
+  monitor: ['M6 18h6'],
+  'circle-check': ['M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10Z', 'm8 12 3 3 5-6'],
+};
+---
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+  >{shapes[name].map((d) => <path d={d} />)}{name === 'tag' && <circle cx="7.5" cy="7.5" r="1.5" />}{name === 'monitor' && (
+    <>
+      <rect x="2" y="4" width="14" height="10" rx="2"></rect>
+      <rect x="16" y="9" width="6" height="11" rx="1.5"></rect>
+    </>
+  )}</svg
+>

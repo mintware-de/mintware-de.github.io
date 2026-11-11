@@ -1,0 +1,37 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations } from '../i18n';
+import { urls, snippets } from '../data/content';
+import Snippet from './Snippet.astro';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t, dict } = useTranslations(locale);
+---
+<section id="quickstart" class="section section-alt">
+  <div class="qs-inner">
+    <div class="qs-left">
+      <span class="eyebrow">{t('quickstart.eyebrow')}</span>
+      <h2 class="section-h2">{t('quickstart.title')}</h2>
+      <p class="qs-p">{t('quickstart.lede')}</p>
+      <div class="cta-row" style="margin-top: 8px">
+        <a href={urls.wikiQuickstart} class="btn-primary">{t('quickstart.ctaPrimary')}</a>
+        <a href={urls.pubDocs} class="btn-ghost">{t('quickstart.ctaSecondary')}</a>
+      </div>
+    </div>
+    <div class="qs-right">
+      <div class="qs-card">
+        <div class="qs-label">1 · {dict.quickstart.blocks[0].label}</div>
+        <Snippet code={snippets.qsInstallShell} lang="shell" prompt variant="v-qs" />
+      </div>
+      <div class="qs-card">
+        <div class="qs-label">2 · {dict.quickstart.blocks[1].label}</div>
+        <Snippet code={snippets.qsAnnotateDart} lang="dart" variant="v-qs" />
+      </div>
+      <div class="qs-card">
+        <div class="qs-label">3 · {dict.quickstart.blocks[2].label}</div>
+        <Snippet code={snippets.qsGenerateShell} lang="shell" prompt variant="v-qs" />
+        <Snippet code={snippets.qsBootDart} lang="dart" variant="v-qs" />
+      </div>
+    </div>
+  </div>
+</section>

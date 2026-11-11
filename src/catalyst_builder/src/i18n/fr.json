@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "title": "Catalyst Builder – Injection de dépendances pour Dart",
+    "description": "Un builder de conteneur d'injection de dépendances léger et simple d'emploi pour Dart. Annotez vos services avec @Service et laissez build_runner générer le conteneur."
+  },
+  "aria": {
+    "main": "Navigation principale",
+    "facts": "Chiffres du paquet"
+  },
+  "nav": {
+    "how": "Comment ça marche",
+    "features": "Fonctionnalités",
+    "quickstart": "Démarrage rapide",
+    "docs": "Docs",
+    "github": "GitHub"
+  },
+  "hero": {
+    "badge": "Dart & Flutter · sous licence MIT",
+    "h1a": "L'injection de dépendances,",
+    "h1b": "câblée à la compilation.",
+    "lede": "Un builder de conteneur d'injection de dépendances léger et simple d'emploi pour Dart. Annotez vos services avec `@Service` et laissez build_runner générer le conteneur.",
+    "ctaPrimary": "Commencer",
+    "ctaSecondary": "Voir sur pub.dev"
+  },
+  "facts": [
+    { "label": "Dernière version" },
+    { "label": "Points pub" },
+    { "label": "Plateformes prises en charge" },
+    { "label": "Licence open source" },
+    { "label": "Éditeur vérifié" }
+  ],
+  "how": {
+    "eyebrow": "COMMENT ÇA MARCHE",
+    "title": "Trois étapes, de l'annotation à une app entièrement câblée.",
+    "steps": [
+      {
+        "tag": "annotate",
+        "title": "Marquez vos services",
+        "body": "Décorez vos classes avec `@Service` et votre point d'entrée avec `@GenerateServiceContainerPlugin`."
+      },
+      {
+        "tag": "generate",
+        "title": "Exécutez build_runner",
+        "body": "Le builder écrit un fichier `*.catalyst_builder.plugin.g.dart` à côté de votre point d'entrée annoté."
+      },
+      {
+        "tag": "boot",
+        "title": "Démarrez le conteneur",
+        "body": "Créez un `ServiceContainer`, enregistrez le plugin généré, démarrez-le – puis résolvez tout ce que vous voulez."
+      }
+    ]
+  },
+  "features": {
+    "eyebrow": "FONCTIONNALITÉS",
+    "title": "Tout ce qu'il faut. Rien à câbler à la main.",
+    "aside": "Conçu autour des principes SOLID et de l'inversion de dépendance – pour garder votre app testable avec la croissance.",
+    "items": [
+      {
+        "title": "Génération à la compilation",
+        "body": "Le conteneur est généré avec build_runner – aucune réflexion à l'exécution, parfait pour Flutter."
+      },
+      {
+        "title": "Piloté par annotations",
+        "body": "Déclarez vos services avec `@Service`, ou centralisez-les avec `@ServiceMap`."
+      },
+      {
+        "title": "Programmez contre des interfaces",
+        "body": "Exposez une implémentation sous son abstraction avec `exposeAs` et échangez-la à tout moment."
+      },
+      {
+        "title": "Architecture à plugins",
+        "body": "Chaque paquet peut fournir son propre plugin de conteneur généré – composez-les dans votre app racine."
+      },
+      {
+        "title": "Fonctionne partout",
+        "body": "Dart et Flutter purs : Android, iOS, web, Windows, macOS et Linux."
+      },
+      {
+        "title": "Léger et ouvert",
+        "body": "Empreinte réduite, points pub complets, licence MIT – utilisez-le dans tout projet, commercial ou non."
+      }
+    ]
+  },
+  "packages": {
+    "eyebrow": "DEUX PAQUETS",
+    "title": "Générez où c'est nécessaire. Dépendez des contrats partout ailleurs.",
+    "items": [
+      {
+        "tag": "Builder",
+        "body": "Utilisez-le dans votre paquet racine ou un paquet plugin pour générer le `ServiceContainerPlugin`."
+      },
+      {
+        "tag": "Contracts",
+        "body": "Utilisez-le dans les paquets qui ne génèrent pas de conteneur mais fournissent des services résolubles."
+      }
+    ],
+    "pubLink": "pub.dev/packages/{name} →"
+  },
+  "quickstart": {
+    "eyebrow": "DÉMARRAGE RAPIDE",
+    "title": "Opérationnel en moins d'une minute.",
+    "lede": "Ajoutez les paquets, annotez votre point d'entrée, générez – c'est fait. Le wiki détaille une app Flutter complète.",
+    "ctaPrimary": "Lire le guide complet",
+    "ctaSecondary": "Référence API",
+    "blocks": [
+      { "label": "Installation" },
+      { "label": "Annoter lib/main.dart" },
+      { "label": "Générer & démarrer" }
+    ]
+  },
+  "cta": {
+    "title": "Laissez le builder câbler.",
+    "titleAccent": "Vous écrivez l'app.",
+    "lede": "Gratuit et open source. Mettez une étoile au repo, ouvrez une issue ou envoyez une pull request – les contributions sont les bienvenues.",
+    "star": "Star sur GitHub",
+    "docs": "Lire la doc",
+    "logoAria": "Catalyst Builder"
+  },
+  "footer": {
+    "copyright": "© 2026 {brand} · Publié sous licence MIT",
+    "github": "GitHub",
+    "pubdev": "pub.dev",
+    "changelog": "Changelog",
+    "issues": "Issues"
+  }
+}

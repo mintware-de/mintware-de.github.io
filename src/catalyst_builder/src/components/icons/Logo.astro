@@ -1,0 +1,34 @@
+---
+// The Catalyst Builder logo mark, paths verbatim from the original export.
+interface Props {
+  width: number;
+  height: number;
+  label?: string; // when set, becomes role="img" + aria-label; otherwise aria-hidden
+}
+const { width, height, label } = Astro.props;
+---
+<svg
+  width={width}
+  height={height}
+  viewBox="52 118 408 276"
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  ><g fill="none" stroke-linecap="round" stroke-linejoin="round"
+    ><path
+      d="M226 166 L174 136 L70 196 L70 316 L174 376 L226 346"
+      stroke="#F5F7FA"
+      stroke-width="30"></path
+    ><path
+      d="M174 216 L209 236 L209 276 L174 296 L139 276 L139 236 Z"
+      fill="var(--accent, #b8f34a)"
+      stroke="var(--accent, #b8f34a)"
+      stroke-width="12"></path
+    ><path d="M209 256 L294 256" stroke="var(--accent, #b8f34a)" stroke-width="30"></path
+    ><path
+      d="M294 366 L294 146 L394 146 L426 201 L394 256 L294 256 M294 256 L409 256 L441 311 L409 366 L294 366"
+      stroke="var(--accent, #b8f34a)"
+      stroke-width="30"></path
+    ></g
+  ></svg
+>

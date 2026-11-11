@@ -1,0 +1,30 @@
+---
+import { codeToHtml } from 'shiki';
+import { catalystDark } from '../styles/shiki-theme';
+
+interface Props {
+  code: string;
+  lang: 'dart' | 'shell';
+  /** prefix an accent-colored "$ " prompt (shell only) */
+  prompt?: boolean;
+  /** v-hero | v-step | v-qs — controls padding/size/bg via global.css */
+  variant?: 'v-hero' | 'v-step' | 'v-qs';
+}
+const { code, lang, prompt = false, variant = 'v-hero' } = Astro.props;
+
+// Shiki renders Dart with the custom catalyst-dark theme; shell snippets stay
+// plain text with an accent "$" prompt — exactly as the original page had them.
+const html =
+  lang === 'dart'
+    ? await codeToHtml(code, { lang: 'dart', theme: catalystDark })
+    : null;
+---
+{
+  html ? (
+    <div class:list={['snippet-wrap', variant]} set:html={html} />
+  ) : (
+    <div class:list={['snippet-wrap', variant]}>
+      <pre>{prompt && <span class="prompt">$ </span>}{code}</pre>
+    </div>
+  )
+}

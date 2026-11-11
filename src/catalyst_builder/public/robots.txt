@@ -1,0 +1,5 @@
+# TODO: update to the final GitHub Pages URL when the repo name is set.
+User-agent: *
+Allow: /
+
+Sitemap: https://julian.github.io/catalyst_builder_website/sitemap-index.xml

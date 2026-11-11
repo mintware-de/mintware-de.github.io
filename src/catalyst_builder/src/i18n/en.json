@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "title": "Catalyst Builder – Dependency injection for Dart",
+    "description": "A lightweight, easy-to-use dependency injection container builder for Dart. Annotate your services with @Service and let build_runner generate the container for you."
+  },
+  "aria": {
+    "main": "Main",
+    "facts": "Package facts"
+  },
+  "nav": {
+    "how": "How it works",
+    "features": "Features",
+    "quickstart": "Quickstart",
+    "docs": "Docs",
+    "github": "GitHub"
+  },
+  "hero": {
+    "badge": "Dart & Flutter · MIT licensed",
+    "h1a": "Dependency injection,",
+    "h1b": "wired at build time.",
+    "lede": "A lightweight, easy-to-use dependency injection container builder for Dart. Annotate your services with `@Service` and let build_runner generate the container for you.",
+    "ctaPrimary": "Get started",
+    "ctaSecondary": "View on pub.dev"
+  },
+  "facts": [
+    { "label": "Latest release" },
+    { "label": "pub points" },
+    { "label": "Platforms supported" },
+    { "label": "Open source license" },
+    { "label": "Verified publisher" }
+  ],
+  "how": {
+    "eyebrow": "HOW IT WORKS",
+    "title": "Three steps from annotation to a fully wired app.",
+    "steps": [
+      {
+        "tag": "annotate",
+        "title": "Mark your services",
+        "body": "Decorate classes with `@Service` and your entry point with `@GenerateServiceContainerPlugin`."
+      },
+      {
+        "tag": "generate",
+        "title": "Run build_runner",
+        "body": "The builder writes a `*.catalyst_builder.plugin.g.dart` file next to your annotated entry point."
+      },
+      {
+        "tag": "boot",
+        "title": "Boot the container",
+        "body": "Create a `ServiceContainer`, register the generated plugin, boot it – then resolve anything."
+      }
+    ]
+  },
+  "features": {
+    "eyebrow": "FEATURES",
+    "title": "Everything you need. Nothing you have to wire by hand.",
+    "aside": "Built around SOLID principles and dependency inversion – so your app stays testable as it grows.",
+    "items": [
+      {
+        "title": "Compile-time generation",
+        "body": "The container is generated with build_runner – no runtime reflection, a perfect fit for Flutter."
+      },
+      {
+        "title": "Annotation-driven",
+        "body": "Declare services with `@Service`, or map them centrally with `@ServiceMap`."
+      },
+      {
+        "title": "Program to interfaces",
+        "body": "Expose an implementation under its abstraction with `exposeAs` and swap it anytime."
+      },
+      {
+        "title": "Plugin architecture",
+        "body": "Each package can ship its own generated container plugin – compose them in your root app."
+      },
+      {
+        "title": "Runs everywhere",
+        "body": "Pure Dart and Flutter: Android, iOS, web, Windows, macOS and Linux."
+      },
+      {
+        "title": "Lightweight & open",
+        "body": "Small footprint, full pub points, MIT licensed – use it in any project, commercial or not."
+      }
+    ]
+  },
+  "packages": {
+    "eyebrow": "TWO PACKAGES",
+    "title": "Generate where you need it. Depend on contracts everywhere else.",
+    "items": [
+      {
+        "tag": "Builder",
+        "body": "Use it in your root package or a plugin package to generate the `ServiceContainerPlugin`."
+      },
+      {
+        "tag": "Contracts",
+        "body": "Use it in packages that don't generate a container themselves but provide services that can be resolved."
+      }
+    ],
+    "pubLink": "pub.dev/packages/{name} →"
+  },
+  "quickstart": {
+    "eyebrow": "QUICKSTART",
+    "title": "Up and running in under a minute.",
+    "lede": "Add the packages, annotate your entry point, generate – done. The wiki walks through a complete Flutter app.",
+    "ctaPrimary": "Read the full guide",
+    "ctaSecondary": "API reference",
+    "blocks": [
+      { "label": "Install" },
+      { "label": "Annotate lib/main.dart" },
+      { "label": "Generate & boot" }
+    ]
+  },
+  "cta": {
+    "title": "Let the builder do the wiring.",
+    "titleAccent": "You write the app.",
+    "lede": "Free and open source. Star the repo, open an issue or send a pull request – contributions are welcome.",
+    "star": "Star on GitHub",
+    "docs": "Read the docs",
+    "logoAria": "Catalyst Builder"
+  },
+  "footer": {
+    "copyright": "© 2026 {brand} · Released under the MIT License",
+    "github": "GitHub",
+    "pubdev": "pub.dev",
+    "changelog": "Changelog",
+    "issues": "Issues"
+  }
+}
