@@ -1,0 +1,89 @@
+---
+import type { Locale } from '../i18n';
+import {
+  locales,
+  defaultLocale,
+  localeNames,
+  localePath,
+  useTranslations,
+  LOCALE_STORAGE_KEY,
+  LOCALE_DECIDED_KEY,
+} from '../i18n';
+import GlobeIcon from './icons/GlobeIcon.astro';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t } = useTranslations(locale);
+
+// Only the default locale needs `?lang=`: it is served by pages/index.astro,
+// the one page that runs the negotiation script — and without an explicit
+// `?lang=en` that script would honour a stored `cb-locale=fr` and bounce the
+// visitor straight back to /fr/. Every other locale is a real route, so it
+// gets a clean URL that also works with JavaScript disabled.
+const items = locales.map((l) => ({
+  locale: l,
+  href: l === defaultLocale ? `${localePath(l)}?lang=${l}` : localePath(l),
+}));
+---
+
+<div class="lang" id="lang-switcher">
+  <details class="lang-details">
+    <summary class="lang-trigger" aria-label={t('aria.language')}>
+      <GlobeIcon />
+      <span class="lang-code">{locale.toUpperCase()}</span>
+    </summary>
+    <ul class="lang-menu" aria-label={t('aria.languageMenu')}>
+      {items.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class="lang-item"
+            data-lang={item.locale}
+            aria-current={item.locale === locale ? 'true' : undefined}
+          >
+            <span>{localeNames[item.locale]}</span>
+            <span class="lang-item-code">{item.locale.toUpperCase()}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </details>
+  <!--
+    Progressive enhancement only — <details>/<summary> already opens, closes and
+    toggles from the keyboard without any of this. Everything below is wrapped so
+    a throw can never block the page, and the links navigate natively (so
+    middle-click / "open in new tab" still work) rather than being intercepted.
+  -->
+  <script is:inline define:vars={{ storageKey: LOCALE_STORAGE_KEY, decidedKey: LOCALE_DECIDED_KEY }}>
+    (function () {
+      var root = document.getElementById('lang-switcher');
+      if (!root) return;
+      var details = root.querySelector('details');
+      var summary = root.querySelector('summary');
+      if (!details) return;
+      document.addEventListener('click', function (e) {
+        if (details.open && !root.contains(e.target)) details.open = false;
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && details.open) {
+          details.open = false;
+          if (summary) summary.focus();
+        }
+      });
+      var links = root.querySelectorAll('.lang-item');
+      for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', function (e) {
+          // Modified clicks open a background tab and do not move this page, so
+          // they must not rewrite the stored preference.
+          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          try {
+            localStorage.setItem(storageKey, this.getAttribute('data-lang'));
+            sessionStorage.setItem(decidedKey, '1');
+          } catch (err) { /* private mode: the link still navigates */ }
+          // Carry the section across the switch (section ids are identical in
+          // every dictionary). Without JS the hash is dropped — acceptable.
+          if (location.hash) this.href = this.getAttribute('href') + location.hash;
+        });
+      }
+    })();
+  </script>
+</div>

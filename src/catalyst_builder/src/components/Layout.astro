@@ -3,7 +3,7 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/space-grotesk';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
-import { useTranslations, locales, defaultLocale, type Locale } from '../i18n';
+import { useTranslations, locales, defaultLocale, localePath, type Locale } from '../i18n';
 import { version, urls } from '../data/content';
 
 interface Props {
@@ -17,8 +17,10 @@ const { t } = useTranslations(locale);
 // base = the path prefix the site is served under (see astro.config.mjs).
 const siteRoot = import.meta.env.SITE.replace(/\/$/, '');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const localePath = (l: Locale) => `${siteRoot}${base}/${l === defaultLocale ? '' : `${l}/`}`;
-const canonical = localePath(locale);
+// hreflang/canonical must be absolute, so prefix the shared base-relative URL
+// rather than rebuild it here — keeps it byte-identical to the nav links.
+const href = (l: Locale) => `${siteRoot}${localePath(l)}`;
+const canonical = href(locale);
 
 const ogLocales: Record<Locale, string> = {
   en: 'en_US',
@@ -50,8 +52,8 @@ const jsonLd = JSON.stringify({
     <meta name="description" content={t('meta.description')} />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="canonical" href={canonical} />
-    {locales.map((l) => <link rel="alternate" hreflang={l} href={localePath(l)} />)}
-    <link rel="alternate" hreflang="x-default" href={localePath(defaultLocale)} />
+    {locales.map((l) => <link rel="alternate" hreflang={l} href={href(l)} />)}
+    <link rel="alternate" hreflang="x-default" href={href(defaultLocale)} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={t('meta.title')} />

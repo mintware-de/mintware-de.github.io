@@ -197,6 +197,95 @@ button:focus-visible {
   border-color: var(--text-dim);
 }
 
+/* ---------- language switcher ---------- */
+.lang {
+  position: relative;
+}
+/* Same box as .btn-gh so the two pills line up in the nav row. */
+.lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 15px;
+  cursor: pointer;
+  list-style: none; /* suppress the <details> disclosure marker */
+}
+.lang-trigger::-webkit-details-marker {
+  display: none;
+}
+.lang-trigger:hover,
+.lang-details[open] .lang-trigger {
+  border-color: var(--text-dim);
+}
+.lang-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.lang-code {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.lang-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 3; /* .site-header already lifts the whole header above the page */
+  min-width: 180px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  max-width: calc(100vw - 24px);
+}
+.lang-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-mid);
+}
+.lang-item:hover {
+  color: var(--text);
+  background: var(--bg-alt);
+}
+.lang-item[aria-current='true'] {
+  color: var(--accent);
+}
+.lang-item-code {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+/*
+  Below this the nav's flex-wrap can drop the pill onto its own row left of
+  centre, and a right-anchored panel then hangs off the viewport's left edge.
+  Un-anchor it and let the header centre it instead — `top: 100%` now clears the
+  whole (taller, wrapped) header, and max-width keeps it inside the screen.
+  720px, not the ~660px where the wrap actually ends, so a locale with longer
+  nav labels still can't push the pill into the danger zone.
+*/
+@media (max-width: 720px) {
+  .lang {
+    position: static;
+  }
+  .lang-menu {
+    top: 100%;
+    right: 0;
+    left: 0;
+    margin-inline: auto;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+  }
+}
+
 /* ---------- hero ---------- */
 .hero {
   position: relative;

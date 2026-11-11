@@ -5,7 +5,9 @@
   },
   "aria": {
     "main": "Main",
-    "facts": "Package facts"
+    "facts": "Package facts",
+    "language": "Language",
+    "languageMenu": "Choose language"
   },
   "nav": {
     "how": "How it works",

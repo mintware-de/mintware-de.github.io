@@ -26,6 +26,40 @@ function deepMerge<T>(base: T, over: unknown): T {
   return (over === undefined ? base : over) as T;
 }
 
+/**
+ * Endonyms — deliberately NOT dictionary keys. A visitor picks their own
+ * language, so every menu shows each name in its own language ("Français",
+ * never "Francés"); translating them would defeat the control.
+ */
+export const localeNames: Record<Locale, string> = {
+  en: 'English',
+  de: 'Deutsch',
+  fr: 'Français',
+  it: 'Italiano',
+  es: 'Español',
+};
+
+/**
+ * Root-relative link target for a locale, with the trailing slash the
+ * canonical/hreflang URLs use: `/catalyst_builder/` for the default locale,
+ * `/catalyst_builder/de/` otherwise. Keep this the only definition of "what is
+ * a locale URL" — nav links, canonicals and hreflangs must agree exactly,
+ * otherwise `trailingSlash: 'ignore'` silently doubles every page.
+ */
+export function localePath(l: Locale): string {
+  const base = (import.meta.env.BASE_URL ?? '/').replace(/\/+$/, '');
+  return l === defaultLocale ? `${base}/` : `${base}/${l}/`;
+}
+
+/**
+ * Client-side locale preference contract, shared by the negotiation script in
+ * pages/index.astro and LanguageSwitcher's click handler. Both are `is:inline`
+ * scripts and must agree byte-for-byte, so the names live here and are passed
+ * in via `define:vars` rather than duplicated as literals.
+ */
+export const LOCALE_STORAGE_KEY = 'cb-locale';
+export const LOCALE_DECIDED_KEY = 'cb-locale-decided';
+
 const dicts: Record<Locale, unknown> = { en, de, fr, it, es };
 
 const get = (o: unknown, path: string): unknown =>

@@ -5,7 +5,9 @@
   },
   "aria": {
     "main": "Hauptnavigation",
-    "facts": "Paket-Fakten"
+    "facts": "Paket-Fakten",
+    "language": "Sprache",
+    "languageMenu": "Sprache auswählen"
   },
   "nav": {
     "how": "So funktioniert's",

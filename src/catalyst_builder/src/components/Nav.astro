@@ -4,6 +4,7 @@ import { useTranslations } from '../i18n';
 import { urls, packageName } from '../data/content';
 import Logo from './icons/Logo.astro';
 import GithubIcon from './icons/GithubIcon.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 const { locale } = Astro.props as { locale: Locale };
 const { t } = useTranslations(locale);
@@ -19,6 +20,7 @@ const { t } = useTranslations(locale);
       <a href="#features" class="nav-link">{t('nav.features')}</a>
       <a href="#quickstart" class="nav-link">{t('nav.quickstart')}</a>
       <a href={urls.wiki} class="nav-link">{t('nav.docs')}</a>
+      <LanguageSwitcher locale={locale} />
       <a href={urls.github} class="btn-gh">
         <GithubIcon />
         {t('nav.github')}

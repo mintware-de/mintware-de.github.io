@@ -1,4 +1,57 @@
 ---
 import Landing from '../components/Landing.astro';
+import { locales, defaultLocale } from '../i18n';
+
+// Site base path ('/catalyst_builder/' in prod, see astro.config.mjs). Strip
+// the trailing slash so `base + '/' + lang` is always well-formed.
+const base = (import.meta.env.BASE_URL ?? '/').replace(/\/+$/, '');
+// Locales a redirect target exists for ([lang]/index.astro skips the default).
+const redirectTargets = locales.filter((l) => l !== defaultLocale);
 ---
+<!--
+  Automatic language redirect. Static output on GitHub Pages, so this must be
+  client-side. Runs before any body content is parsed (is:inline stays in
+  place, no bundling/deferral), so a non-English visitor never sees a flash
+  of the English page.
+
+  Precedence:
+    1. ?lang=<xx>   — explicit choice; persisted, so the redirect never
+                      overrides a manual pick again (use ?lang=en to opt out).
+    2. stored choice from an earlier ?lang= visit.
+    3. navigator.languages (browser preference list), once per session — the
+       back button must not bounce into a loop.
+-->
+<script is:inline define:vars={{ base, targets: redirectTargets as string[] }}>
+  (function () {
+    try {
+      var params = new URLSearchParams(location.search);
+      var forced = (params.get('lang') || '').toLowerCase();
+      if (forced === 'en' || targets.indexOf(forced) !== -1) {
+        try { localStorage.setItem('cb-locale', forced); } catch (e) {}
+        if (forced !== 'en') location.replace(base + '/' + forced);
+        return;
+      }
+      var stored = null;
+      try { stored = localStorage.getItem('cb-locale'); } catch (e) {}
+      if (stored) {
+        if (targets.indexOf(stored) !== -1) location.replace(base + '/' + stored);
+        return; // 'en' or unknown → stay on the English page
+      }
+      var decided = false;
+      try { decided = sessionStorage.getItem('cb-locale-decided') === '1'; } catch (e) {}
+      if (decided) return;
+      try { sessionStorage.setItem('cb-locale-decided', '1'); } catch (e) {}
+      var tags = (navigator.languages && navigator.languages.length)
+        ? navigator.languages
+        : [navigator.language || 'en'];
+      for (var i = 0; i < tags.length; i++) {
+        var tag = String(tags[i]).toLowerCase().split('-')[0];
+        if (targets.indexOf(tag) !== -1) {
+          location.replace(base + '/' + tag);
+          return;
+        }
+      }
+    } catch (e) { /* never block the page on the redirect */ }
+  })();
+</script>
 <Landing locale="en" />

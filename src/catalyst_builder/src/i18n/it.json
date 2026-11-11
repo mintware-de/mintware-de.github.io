@@ -5,7 +5,9 @@
   },
   "aria": {
     "main": "Navigazione principale",
-    "facts": "Dati del pacchetto"
+    "facts": "Dati del pacchetto",
+    "language": "Lingua",
+    "languageMenu": "Scegli la lingua"
   },
   "nav": {
     "how": "Come funziona",

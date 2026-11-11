@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { devSitemap } from './scripts/dev-sitemap.mjs';
 import { catalystDark } from './src/styles/shiki-theme';
 
 // GitHub Pages USER site (mintware-de/mintware-de.github.io): served from the
@@ -11,12 +12,15 @@ import { catalystDark } from './src/styles/shiki-theme';
 const site = 'https://mintware-de.github.io';
 const base = '/catalyst_builder';
 
+const locales = ['en', 'de', 'fr', 'it', 'es'];
+const defaultLocale = 'en';
+
 // The [lang] routes are hand-rolled (getStaticPaths); the sitemap plugin
 // correlates locale pages itself once told which URL segment is the locale
 // (values here are hreflang output tags, not paths).
 const sitemapI18n = {
-  defaultLocale: 'en',
-  locales: { en: 'en', de: 'de', fr: 'fr', it: 'it', es: 'es' },
+  defaultLocale,
+  locales: Object.fromEntries(locales.map((l) => [l, l])),
 };
 
 export default defineConfig({
@@ -26,14 +30,17 @@ export default defineConfig({
   // Default outDir (dist/ inside the project) — the Pages workflow stages it
   // at <artifact>/catalyst_builder/ so it serves under `base`.
   trailingSlash: 'ignore',
-  integrations: [sitemap({ i18n: sitemapI18n })],
+  // `devSitemap` is a no-op during build; @astrojs/sitemap only writes files
+  // in astro:build:done, so this is what serves the XML under `astro dev`.
+  integrations: [sitemap({ i18n: sitemapI18n }), devSitemap({ site, base, locales, defaultLocale })],
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'de', 'fr', 'it', 'es'],
-    // Route-level fallback (a locale page that doesn't exist yet renders the
-    // fallback locale's page instead of 404). Missing *keys* fall back to en
-    // via the deepMerge in src/i18n/index.ts — different mechanism, both set.
-    fallback: { de: 'en', fr: 'en', it: 'en', es: 'en' },
+    defaultLocale,
+    locales,
+    // No route-level `fallback` map on purpose: with hand-rolled [lang]
+    // routes it made Astro render every route under every locale prefix
+    // (/it/de/, /de/404/, …), shipping ~20 duplicate pages. Missing
+    // translation *keys* still fall back to en via the deepMerge in
+    // src/i18n/index.ts.
     routing: {
       prefixDefaultLocale: false,
     },
