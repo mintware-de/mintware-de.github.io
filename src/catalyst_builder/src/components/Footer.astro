@@ -6,6 +6,10 @@ import { urls, brand, brandUrl } from '../data/content';
 const { locale } = Astro.props as { locale: Locale };
 const { t } = useTranslations(locale);
 const [before, after] = t('footer.copyright').split('{brand}');
+// Hard-coded legal pages live at the Pages domain root (see src/*.html and
+// the Pages staging step in the deploy workflow), i.e. outside the
+// /catalyst_builder/ base — link against SITE, not BASE_URL.
+const siteRoot = import.meta.env.SITE.replace(/\/+$/, '');
 ---
 <footer>
   <div class="footer-inner">
@@ -17,6 +21,8 @@ const [before, after] = t('footer.copyright').split('{brand}');
       <a href={urls.pubBuilder} class="footer-link">{t('footer.pubdev')}</a>
       <a href={urls.pubChangelog} class="footer-link">{t('footer.changelog')}</a>
       <a href={urls.issues} class="footer-link">{t('footer.issues')}</a>
+      <a href={`${siteRoot}/impressum.html`} class="footer-link">{t('footer.impressum')}</a>
+      <a href={`${siteRoot}/datenschutz.html`} class="footer-link">{t('footer.datenschutz')}</a>
     </div>
   </div>
 </footer>

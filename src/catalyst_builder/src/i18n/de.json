@@ -123,6 +123,8 @@
     "github": "GitHub",
     "pubdev": "pub.dev",
     "changelog": "Changelog",
-    "issues": "Issues"
+    "issues": "Issues",
+    "impressum": "Impressum",
+    "datenschutz": "Datenschutzerklärung"
   }
 }

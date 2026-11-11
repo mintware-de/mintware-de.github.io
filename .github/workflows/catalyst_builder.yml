@@ -36,6 +36,9 @@ jobs:
           mkdir -p pages/catalyst_builder
           cp -R src/catalyst_builder/dist/. pages/catalyst_builder/
           cp src/catalyst_builder/public/robots.txt pages/robots.txt
+          # Hard-coded legal pages, served as-is at the Pages domain root
+          # (user site), outside the /catalyst_builder/ base.
+          cp src/impressum.html src/datenschutz.html pages/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: pages
