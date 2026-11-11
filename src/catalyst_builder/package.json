@@ -10,12 +10,16 @@
     "check": "astro check && node scripts/i18n-parity.mjs"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "6.3.11",
     "@astrojs/sitemap": "^3.6.0",
     "@fontsource-variable/inter": "^5.2.0",
     "@fontsource-variable/jetbrains-mono": "^5.2.0",
     "@fontsource-variable/space-grotesk": "^5.2.0",
     "astro": "^5.16.0",
-    "shiki": "^3.23.0"
+    "astro-mermaid": "^2.2.0",
+    "mermaid": "^11.17.2",
+    "shiki": "^3.23.0",
+    "unist-util-visit": "^5.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

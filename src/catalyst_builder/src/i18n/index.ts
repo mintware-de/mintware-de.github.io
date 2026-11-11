@@ -52,6 +52,27 @@ export function localePath(l: Locale): string {
 }
 
 /**
+ * The docs analogue of `localePath` — same rule, one definition:
+ * `/catalyst_builder/docs/quickstart/` for the default locale,
+ * `/catalyst_builder/de/docs/quickstart/` otherwise. Every docs link (nav,
+ * sidebar, TOC-adjacent chrome, the remark link rewrite and the Layout
+ * canonical/hreflang pair) goes through here so they cannot drift apart.
+ */
+export function docsPath(l: Locale, ...segments: string[]): string {
+  return `${localePath(l)}${docsSubPath(...segments)}`;
+}
+
+/**
+ * The docs path *relative to a locale root* — `docs/quickstart/`. This is what
+ * `Layout` takes as its `path` prop, so the canonical/hreflang builder can
+ * append it to `localePath()` for every locale at once.
+ */
+export function docsSubPath(...segments: string[]): string {
+  const tail = segments.filter(Boolean).length ? `${segments.filter(Boolean).join('/')}/` : '';
+  return `docs/${tail}`;
+}
+
+/**
  * Client-side locale preference contract, shared by the negotiation script in
  * pages/index.astro and LanguageSwitcher's click handler. Both are `is:inline`
  * scripts and must agree byte-for-byte, so the names live here and are passed

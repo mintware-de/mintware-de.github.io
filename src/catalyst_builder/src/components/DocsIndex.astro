@@ -1,0 +1,49 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations, docsPath, docsSubPath } from '../i18n';
+import { getCollection } from 'astro:content';
+import Layout from './Layout.astro';
+import Nav from './Nav.astro';
+import Footer from './Footer.astro';
+import { docsSlug, docsGroups, selectDocs, type DocsEntry } from '../data/docs';
+
+const { locale } = Astro.props as { locale: Locale };
+const { t } = useTranslations(locale);
+
+const path = docsSubPath();
+const all = selectDocs(await getCollection('docs'));
+const groups = docsGroups(all);
+
+const groupLabel = (group: DocsEntry['data']['group']) =>
+  group === 'Guides' ? t('docs.groupGuides') : t('docs.groupUpgrading');
+---
+
+<Layout locale={locale} title={`${t('docs.indexTitle')} | catalyst_builder`} description={t('docs.indexIntro')} path={path}>
+  <Nav locale={locale} path={path} />
+  <main>
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-head">
+          <span class="eyebrow">{t('docs.eyebrow')}</span>
+          <h1 class="section-h1">{t('docs.indexTitle')}</h1>
+          <p class="section-lede">{t('docs.indexIntro')}</p>
+        </div>
+        {groups.map(([group, entries]) => (
+          <div class="docs-index-group">
+            <h2 class="docs-index-heading">{groupLabel(group)}</h2>
+            <div class="card-row docs-card-row">
+              {entries.map((entry) => (
+                <a class="docs-card" href={docsPath(locale, docsSlug(entry))}>
+                  <span class="docs-card-title">{entry.data.title}</span>
+                  {entry.data.description && <span class="docs-card-body">{entry.data.description}</span>}
+                  <span class="docs-card-cta">{t('docs.readMore')}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Layout>

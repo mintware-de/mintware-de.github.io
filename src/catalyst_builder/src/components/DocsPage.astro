@@ -1,0 +1,103 @@
+---
+import type { Locale } from '../i18n';
+import { useTranslations, docsPath, docsSubPath } from '../i18n';
+import { getCollection } from 'astro:content';
+import Layout from './Layout.astro';
+import Nav from './Nav.astro';
+import Footer from './Footer.astro';
+import { renderDoc } from '../plugins/docs-markdown';
+import { urls } from '../data/content';
+import { docsSlug, docsGroups, selectDocs, type DocsEntry } from '../data/docs';
+
+interface Props {
+  locale: Locale;
+  doc: DocsEntry;
+}
+const { locale, doc } = Astro.props;
+const { t } = useTranslations(locale);
+
+const slug = docsSlug(doc);
+const path = docsSubPath(slug);
+const { html, headings } = await renderDoc(doc.body, locale);
+
+const all = selectDocs(await getCollection('docs'));
+const groups = docsGroups(all);
+const position = all.findIndex((entry) => docsSlug(entry) === slug);
+const prev = position > 0 ? all[position - 1] : undefined;
+const next = position >= 0 && position < all.length - 1 ? all[position + 1] : undefined;
+
+const groupLabel = (group: DocsEntry['data']['group']) =>
+  group === 'Guides' ? t('docs.groupGuides') : t('docs.groupUpgrading');
+---
+
+<Layout locale={locale} title={`${doc.data.title} | catalyst_builder`} description={doc.data.description} path={path}>
+  <Nav locale={locale} path={path} />
+  <main class="docs-main wrap">
+    <nav class="docs-sidebar" aria-label={t('aria.docsSidebar')}>
+      {groups.map(([group, entries]) => (
+        <div class="docs-nav-group">
+          <h2 class="docs-nav-heading">{groupLabel(group)}</h2>
+          <ul class="docs-nav-list">
+            {entries.map((entry) => {
+              const entrySlug = docsSlug(entry);
+              return (
+                <li>
+                  <a
+                    href={docsPath(locale, entrySlug)}
+                    class="docs-nav-link"
+                    aria-current={entrySlug === slug ? 'page' : undefined}
+                  >
+                    {entry.data.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </nav>
+
+    {/* lang="en": the content is migrated wiki prose, untranslated, while the
+        chrome around it (nav, sidebar, footer) follows `locale`. Declaring the
+        mismatch keeps screen readers on the right voice. */}
+    <article class="docs-article" lang="en">
+      <a class="docs-kicker" href={docsPath(locale)}>{t('docs.backToDocs')}</a>
+      <h1 class="docs-h1">{doc.data.title}</h1>
+      {doc.data.description && <p class="docs-lede">{doc.data.description}</p>}
+      <div class="docs-prose" set:html={html} />
+
+      <nav class="docs-pager" aria-label={t('aria.docsPager')}>
+        {prev && (
+          <a class="docs-pager-link" rel="prev" href={docsPath(locale, docsSlug(prev))}>
+            <span class="docs-pager-label">{t('docs.prev')}</span>
+            <span class="docs-pager-title">{prev.data.title}</span>
+          </a>
+        )}
+        {next && (
+          <a class="docs-pager-link docs-pager-next" rel="next" href={docsPath(locale, docsSlug(next))}>
+            <span class="docs-pager-label">{t('docs.next')}</span>
+            <span class="docs-pager-title">{next.data.title}</span>
+          </a>
+        )}
+      </nav>
+
+      <a class="docs-edit" href={`${urls.editDocsBase}/${slug}.md`}>{t('docs.editOnGithub')}</a>
+    </article>
+
+    {headings.length > 0 && (
+      <nav class="docs-toc" aria-label={t('aria.docsToc')}>
+        <h2 class="docs-toc-heading">{t('docs.onThisPage')}</h2>
+        <ul class="docs-toc-list">
+          {headings
+            .filter((heading) => heading.depth >= 2 && heading.depth <= 3)
+            .map((heading) => (
+              <li class={`docs-toc-item depth-${heading.depth}`}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+        </ul>
+      </nav>
+    )}
+  </main>
+  <Footer locale={locale} />
+</Layout>

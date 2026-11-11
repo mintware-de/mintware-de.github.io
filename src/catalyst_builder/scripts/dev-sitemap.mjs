@@ -24,6 +24,7 @@ const INDEX_NS = 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
  *   base: string,          // path prefix, e.g. '/catalyst_builder' ('' for root)
  *   locales: string[],     // locale codes, in output order
  *   defaultLocale: string, // locale served without a prefix
+ *   extraPaths?: string[], // resolved paths for routes dev cannot enumerate
  * }} DevSitemapOptions
  */
 
@@ -55,19 +56,20 @@ const pageKey = (/** @type {string} */ p, /** @type {string[]} */ locales) => {
   return p;
 };
 
-/** Every locale's path for a page key, in `locales` order. */
+/**
+ * Every locale's path for a page key, in `locales` order — the exact inverse of
+ * `pageKey`, which strips a *leading* locale segment. Building these by
+ * appending instead (`/docs` -> `/docs/de`) makes every nested route look
+ * un-translated to `buildPages` and drop out of the sitemap; it stayed hidden
+ * while the locale root was the only non-root-free route in the project.
+ */
 const localeVariants = (
   /** @type {string} */ key,
   /** @type {DevSitemapOptions} */ opts,
 ) =>
   opts.locales.map((l) => ({
     locale: l,
-    path:
-      l === opts.defaultLocale
-        ? key
-        : key === '/'
-          ? '/' + l
-          : key + '/' + l,
+    path: l === opts.defaultLocale ? key : `/${l}${key === '/' ? '' : key}`,
   }));
 
 /**
@@ -163,8 +165,12 @@ const indexXml = (/** @type {DevSitemapOptions} */ opts) => {
  * @returns {import('astro').AstroIntegration}
  */
 export function devSitemap(options) {
+  // Paths the caller knows but the route tree cannot yield: a `[slug]` route's
+  // values come from `getStaticPaths`, which `astro dev` never runs, so they
+  // are simply absent from `astro:routes:resolved`.
+  const extraPaths = (options.extraPaths ?? []).map((p) => normalize(p, options.base));
   /** @type {Set<string>} */
-  let pathnames = new Set();
+  let pathnames = new Set(extraPaths);
   /** @type {import('astro').AstroIntegration} */
   return {
     name: 'dev-sitemap',
@@ -172,13 +178,14 @@ export function devSitemap(options) {
       'astro:routes:resolved': ({ routes }) => {
         // In dev, dynamic routes have no `pathname` — `pattern` (without the
         // base prefix) is the reliable source.
-        pathnames = new Set(
-          routes
+        pathnames = new Set([
+          ...extraPaths,
+          ...routes
             .filter((r) => r.type === 'page')
             // 404 is excluded in expandRoutes; the component field isn't on
             // the public route type from this hook.
             .map((r) => normalize(r.pathname ?? r.pattern ?? '/', options.base)),
-        );
+        ]);
       },
       'astro:config:setup': ({ command, updateConfig }) => {
         if (command !== 'dev') return;

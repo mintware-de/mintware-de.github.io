@@ -11,7 +11,7 @@ import {
 } from '../i18n';
 import GlobeIcon from './icons/GlobeIcon.astro';
 
-const { locale } = Astro.props as { locale: Locale };
+const { locale, path } = Astro.props as { locale: Locale; path?: string };
 const { t } = useTranslations(locale);
 
 // Only the default locale needs `?lang=`: it is served by pages/index.astro,
@@ -19,9 +19,20 @@ const { t } = useTranslations(locale);
 // `?lang=en` that script would honour a stored `cb-locale=fr` and bounce the
 // visitor straight back to /fr/. Every other locale is a real route, so it
 // gets a clean URL that also works with JavaScript disabled.
+//
+// `path` (e.g. `docs/quickstart/`) keeps the visitor inside the section they
+// are reading: without it, switching language on a docs page lands you on the
+// locale landing page. Docs exist as real routes in the default locale too, so
+// there the `?lang=` workaround is neither needed nor wanted — it would drop
+// the path.
 const items = locales.map((l) => ({
   locale: l,
-  href: l === defaultLocale ? `${localePath(l)}?lang=${l}` : localePath(l),
+  href:
+    path !== undefined
+      ? `${localePath(l)}${path}`
+      : l === defaultLocale
+        ? `${localePath(l)}?lang=${l}`
+        : localePath(l),
 }));
 ---
 

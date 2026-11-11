@@ -1,6 +1,8 @@
 // @ts-check
+import { readdirSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import mermaid from 'astro-mermaid';
 import { devSitemap } from './scripts/dev-sitemap.mjs';
 import { catalystDark } from './src/styles/shiki-theme';
 
@@ -23,6 +25,25 @@ const sitemapI18n = {
   locales: Object.fromEntries(locales.map((l) => [l, l])),
 };
 
+// Docs URLs are `/docs/<slug>`, served by a `[slug]` route whose values come
+// from getStaticPaths — which `astro dev` never runs, so the dev sitemap would
+// otherwise lose every docs page but the index. The slugs are just the content
+// file names, so enumerate them here and hand them to the dev sitemap.
+// Read once at config load: a file added while the dev server is running shows
+// up after a restart, which is the same staleness the rest of the config has.
+// (A page marked `draft: true` would still be listed in dev; the build drops
+// it at getStaticPaths, so the divergence is dev-only and self-corrects.)
+const docsSlugs = readdirSync(new URL('./src/content/docs', import.meta.url), {
+  recursive: true,
+})
+  .map(String)
+  .filter((f) => f.endsWith('.md'))
+  .map((f) => f.replace(/\.md$/, ''));
+const docsPaths = docsSlugs.flatMap((slug) => [
+  `/docs/${slug}`,
+  ...locales.filter((l) => l !== defaultLocale).map((l) => `/${l}/docs/${slug}`),
+]);
+
 export default defineConfig({
   site,
   base,
@@ -32,7 +53,17 @@ export default defineConfig({
   trailingSlash: 'ignore',
   // `devSitemap` is a no-op during build; @astrojs/sitemap only writes files
   // in astro:build:done, so this is what serves the XML under `astro dev`.
-  integrations: [sitemap({ i18n: sitemapI18n }), devSitemap({ site, base, locales, defaultLocale })],
+  // `mermaid` is here for its injected client renderer — the only piece we use.
+  // Our docs fences are converted to `<pre class="mermaid">` by our own remark
+  // plugin (src/plugins/docs-links.mjs), because the docs are rendered through
+  // a pipeline we own rather than the config-level markdown chain. The script
+  // loads mermaid lazily and only on pages that actually contain a diagram.
+  // `autoTheme` is off: this site is dark-only, there is no data-theme to follow.
+  integrations: [
+    mermaid({ theme: 'dark', autoTheme: false }),
+    sitemap({ i18n: sitemapI18n }),
+    devSitemap({ site, base, locales, defaultLocale, extraPaths: docsPaths }),
+  ],
   i18n: {
     defaultLocale,
     locales,

@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import DocsPage from '../../../components/DocsPage.astro';
+import { locales, defaultLocale, type Locale } from '../../../i18n';
+import { docsSlug, selectDocs, type DocsEntry } from '../../../data/docs';
+
+// Hand-rolled locale × slug cross-product, matching [lang]/index.astro: Astro's
+// own i18n route generation is deliberately off (see astro.config.mjs), so the
+// locale allowlist lives here — an unknown /xx/ prefix still 404s, and so does
+// an unknown slug.
+export async function getStaticPaths() {
+  const docs = selectDocs(await getCollection('docs'));
+  return locales
+    .filter((lang) => lang !== defaultLocale)
+    .flatMap((lang) =>
+      docs.map((doc) => ({
+        params: { lang, slug: docsSlug(doc) },
+        props: { doc, lang },
+      })),
+    );
+}
+
+const { doc, lang } = Astro.props as { doc: DocsEntry; lang: Locale };
+---
+<DocsPage locale={lang} doc={doc} />

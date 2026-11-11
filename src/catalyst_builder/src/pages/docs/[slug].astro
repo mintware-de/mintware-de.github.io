@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import DocsPage from '../../components/DocsPage.astro';
+import { defaultLocale } from '../../i18n';
+import { docsSlug, selectDocs, type DocsEntry } from '../../data/docs';
+
+export async function getStaticPaths() {
+  return selectDocs(await getCollection('docs')).map((doc) => ({
+    params: { slug: docsSlug(doc) },
+    props: { doc },
+  }));
+}
+
+const { doc } = Astro.props as { doc: DocsEntry };
+---
+<DocsPage locale={defaultLocale} doc={doc} />

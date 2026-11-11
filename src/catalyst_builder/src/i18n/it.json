@@ -7,7 +7,10 @@
     "main": "Navigazione principale",
     "facts": "Dati del pacchetto",
     "language": "Lingua",
-    "languageMenu": "Scegli la lingua"
+    "languageMenu": "Scegli la lingua",
+    "docsSidebar": "Navigazione della documentazione",
+    "docsToc": "In questa pagina",
+    "docsPager": "Pagine precedente e successiva"
   },
   "nav": {
     "how": "Come funziona",
@@ -15,6 +18,19 @@
     "quickstart": "Avvio rapido",
     "docs": "Documentazione",
     "github": "GitHub"
+  },
+  "docs": {
+    "eyebrow": "DOCUMENTAZIONE",
+    "indexTitle": "Documentazione",
+    "indexIntro": "Le guide che ti portano da un progetto vuoto a un container di servizi avviato, più le note per il passaggio tra le major version.",
+    "groupGuides": "Guide",
+    "groupUpgrading": "Aggiornamenti",
+    "readMore": "Leggi la guida →",
+    "onThisPage": "In questa pagina",
+    "backToDocs": "Tutte le guide",
+    "prev": "Precedente",
+    "next": "Successiva",
+    "editOnGithub": "Modifica questa pagina su GitHub"
   },
   "hero": {
     "badge": "Dart & Flutter · con licenza MIT",
@@ -101,7 +117,7 @@
   "quickstart": {
     "eyebrow": "AVVIO RAPIDO",
     "title": "Pronto in meno di un minuto.",
-    "lede": "Aggiungi i pacchetti, annota l'entry point, genera – fatto. La wiki guida un'app Flutter completa.",
+    "lede": "Aggiungi i pacchetti, annota l'entry point, genera – fatto. La documentazione guida un'app Flutter completa.",
     "ctaPrimary": "Leggi la guida completa",
     "ctaSecondary": "Riferimento API",
     "blocks": [

@@ -9,13 +9,16 @@ export const contractsName = 'catalyst_builder_contracts';
 
 export const urls = {
   github: 'https://github.com/mintware-de/catalyst_builder',
-  wiki: 'https://github.com/mintware-de/catalyst_builder/wiki',
-  wikiQuickstart: 'https://github.com/mintware-de/catalyst_builder/wiki/Quickstart-App',
   issues: 'https://github.com/mintware-de/catalyst_builder/issues',
   pubBuilder: 'https://pub.dev/packages/catalyst_builder',
   pubContracts: 'https://pub.dev/packages/catalyst_builder_contracts',
   pubChangelog: 'https://pub.dev/packages/catalyst_builder/changelog',
   pubDocs: 'https://pub.dev/documentation/catalyst_builder/latest/',
+  // Docs prose lives in this repo (src/content/docs), migrated out of the
+  // GitHub wiki — which is deliberately not linked here any more, so nothing
+  // can quietly start pointing users back at it. Locale-aware docs links are
+  // built by docsPath(), never from this map.
+  editDocsBase: 'https://github.com/mintware-de/mintware-de.github.io/edit/main/src/catalyst_builder/src/content/docs',
 };
 
 export const packages = [

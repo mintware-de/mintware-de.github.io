@@ -7,7 +7,10 @@
     "main": "Main",
     "facts": "Package facts",
     "language": "Language",
-    "languageMenu": "Choose language"
+    "languageMenu": "Choose language",
+    "docsSidebar": "Docs navigation",
+    "docsToc": "On this page",
+    "docsPager": "Previous and next pages"
   },
   "nav": {
     "how": "How it works",
@@ -15,6 +18,19 @@
     "quickstart": "Quickstart",
     "docs": "Docs",
     "github": "GitHub"
+  },
+  "docs": {
+    "eyebrow": "DOCS",
+    "indexTitle": "Documentation",
+    "indexIntro": "Guides that take you from an empty project to a booted service container, plus the notes for moving between major versions.",
+    "groupGuides": "Guides",
+    "groupUpgrading": "Upgrading",
+    "readMore": "Read guide →",
+    "onThisPage": "On this page",
+    "backToDocs": "All docs",
+    "prev": "Previous",
+    "next": "Next",
+    "editOnGithub": "Edit this page on GitHub"
   },
   "hero": {
     "badge": "Dart & Flutter · MIT licensed",
@@ -101,7 +117,7 @@
   "quickstart": {
     "eyebrow": "QUICKSTART",
     "title": "Up and running in under a minute.",
-    "lede": "Add the packages, annotate your entry point, generate – done. The wiki walks through a complete Flutter app.",
+    "lede": "Add the packages, annotate your entry point, generate – done. The docs walk through a complete Flutter app.",
     "ctaPrimary": "Read the full guide",
     "ctaSecondary": "API reference",
     "blocks": [

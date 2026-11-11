@@ -38,3 +38,20 @@ export const catalystDark: ThemeRegistration = {
     },
   ],
 };
+
+/**
+ * `catalystDark` is transparent on purpose: <Snippet> paints its own card and
+ * lets the code sit on it. Markdown code blocks have no such wrapper, and Astro
+ * inlines the theme background into a `style` attribute on the `<pre>`, which
+ * CSS cannot override — so the docs code surface has to come from the theme.
+ * Derived from `catalystDark` so the palette cannot drift; `#161B23` is
+ * `--code-bg` in global.css.
+ */
+export const catalystDarkSurface: ThemeRegistration = {
+  ...catalystDark,
+  name: 'catalyst-dark-surface',
+  colors: { ...catalystDark.colors, 'editor.background': '#161B23' },
+  settings: (catalystDark.settings ?? []).map((rule, i) =>
+    i === 0 ? { ...rule, settings: { ...rule.settings, background: '#161B23' } } : rule,
+  ),
+};

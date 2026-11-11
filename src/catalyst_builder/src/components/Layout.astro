@@ -9,8 +9,17 @@ import { getPackageInfo } from '../data/pub';
 
 interface Props {
   locale: Locale;
+  /** Overrides `meta.title`; docs pages pass "<page title> | catalyst_builder". */
+  title?: string;
+  /** Overrides `meta.description`; docs pages pass their frontmatter description. */
+  description?: string;
+  /**
+   * Path relative to the locale root, e.g. `docs/quickstart/` — pass
+   * `docsSubPath(slug)` from a docs page, omit it for a locale landing page.
+   */
+  path?: string;
 }
-const { locale } = Astro.props;
+const { locale, title: pageTitle, description: pageDescription, path } = Astro.props;
 const { t } = useTranslations(locale);
 const { version, license } = await getPackageInfo();
 
@@ -21,8 +30,12 @@ const siteRoot = import.meta.env.SITE.replace(/\/$/, '');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // hreflang/canonical must be absolute, so prefix the shared base-relative URL
 // rather than rebuild it here — keeps it byte-identical to the nav links.
-const href = (l: Locale) => `${siteRoot}${localePath(l)}`;
+// `path` is appended for docs pages: a docs page is the same document under
+// every locale prefix, so without it all 15 would declare the locale root as
+// their canonical and cross-declare each other as alternates.
+const href = (l: Locale) => `${siteRoot}${localePath(l)}${path ?? ''}`;
 const canonical = href(locale);
+const isLanding = path === undefined;
 
 const ogLocales: Record<Locale, string> = {
   en: 'en_US',
@@ -50,22 +63,24 @@ const jsonLd = JSON.stringify({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{t('meta.title')}</title>
-    <meta name="description" content={t('meta.description')} />
+    <title>{pageTitle ?? t('meta.title')}</title>
+    <meta name="description" content={pageDescription || t('meta.description')} />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="canonical" href={canonical} />
     {locales.map((l) => <link rel="alternate" hreflang={l} href={href(l)} />)}
     <link rel="alternate" hreflang="x-default" href={href(defaultLocale)} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={t('meta.title')} />
-    <meta property="og:description" content={t('meta.description')} />
+    <meta property="og:title" content={pageTitle ?? t('meta.title')} />
+    <meta property="og:description" content={pageDescription || t('meta.description')} />
     <meta property="og:locale" content={ogLocales[locale]} />
     {locales.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={ogLocales[l]} />)}
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={t('meta.title')} />
-    <meta name="twitter:description" content={t('meta.description')} />
-    <script type="application/ld+json" set:html={jsonLd} />
+    <meta name="twitter:title" content={pageTitle ?? t('meta.title')} />
+    <meta name="twitter:description" content={pageDescription || t('meta.description')} />
+    {/* Describes the package itself, so it belongs on the landing pages only —
+        a docs page is documentation *about* the package, not the thing. */}
+    {isLanding && <script type="application/ld+json" set:html={jsonLd} />}
   </head>
   <body>
     <slot />

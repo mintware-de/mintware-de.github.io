@@ -1,6 +1,6 @@
 ---
 import type { Locale } from '../i18n';
-import { useTranslations } from '../i18n';
+import { useTranslations, docsPath } from '../i18n';
 import { urls } from '../data/content';
 import Logo from './icons/Logo.astro';
 import StarIcon from './icons/StarIcon.astro';
@@ -20,7 +20,7 @@ const { t } = useTranslations(locale);
         <StarIcon />
         {t('cta.star')}
       </a>
-      <a href={urls.wiki} class="btn-ghost">{t('cta.docs')}</a>
+      <a href={docsPath(locale)} class="btn-ghost">{t('cta.docs')}</a>
     </div>
   </div>
 </section>
